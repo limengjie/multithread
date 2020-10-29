@@ -11,10 +11,13 @@ atomic<long> multiThreadedSum(0);
 const size_t input_size = 30003;
 const size_t min_block_size = 1000;
 
+//[start, end)
 void sumNumbers(const vector<int>& toBeSummed, int start, int end)
 {
+   long sum = 0;
    for (int i = start; i < end; ++i)
-      multiThreadedSum += toBeSummed[i];
+      sum += toBeSummed[i];
+   multiThreadedSum += sum;
 }
 
 int main()
@@ -41,7 +44,7 @@ int main()
    for (int i = 0; i < num_threads; ++i)
    {
       last = start + block_size;
-      threads[i] = thread(sumNumbers, toBeSummed, start, last);
+      threads[i] = thread(sumNumbers, ref(toBeSummed), start, last);
       start = last;
    }
    //process leftover
